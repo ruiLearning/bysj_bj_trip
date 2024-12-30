@@ -130,12 +130,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                         intent.setClass(MainActivity.this, RoutePlanDemo.class);
                         startActivity(intent);
                         break;
+//                    case 1:
+//                        Intent intent1 = new Intent();
+//                        intent1.setClass(MainActivity.this, BusLineSearchDemo.class);
+//                        startActivity(intent1);
+//                        break;
                     case 1:
-                        Intent intent1 = new Intent();
-                        intent1.setClass(MainActivity.this, BusLineSearchDemo.class);
-                        startActivity(intent1);
-                        break;
-                    case 2:
                         Intent intent2 = new Intent();
                         intent2.setClass(MainActivity.this, PoiSearchDemo.class);
                         startActivity(intent2);
@@ -429,7 +429,7 @@ fragment 碎片显示
                 int pos = position % 4;
                 current = position;
                 textview.setText(textIdArray[pos]);
-                mImageViews.get(position % mImageViews.size()).setScaleType(ImageView.ScaleType.FIT_XY);
+                mImageViews.get(position % mImageViews.size()).setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ((ViewPager) container).addView(mImageViews.get(position % mImageViews.size()), 0);
                 return mImageViews.get(position % mImageViews.size());
 
@@ -487,7 +487,8 @@ fragment 碎片显示
                     String Url[] = new String[]{"https://img2.baidu.com/it/u=3868982764,3926699003&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1422"
                             , "https://img0.baidu.com/it/u=2747146180,1946809341&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1421"
                             , "https://img2.baidu.com/it/u=3868982764,3926699003&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1422"
-                            , "http://bmob-cdn-7049.b0.upaiyun.com/2016/10/24/9701488f40e44533807b2508b749e980.png"};
+                            , "https://img0.baidu.com/it/u=2747146180,1946809341&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1421"
+                            };
 
                     for (int i = 0; i < 4; i++) {
                         AsynImageLoader asynImageLoader = new AsynImageLoader();

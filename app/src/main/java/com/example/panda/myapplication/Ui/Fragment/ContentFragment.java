@@ -2,14 +2,19 @@ package com.zgsy.bj.Ui.Fragment;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +23,13 @@ import com.zgsy.bj.Data.JianDanHtmlParser;
 import com.zgsy.bj.R;
 import com.zgsy.bj.Tools.AsynImageLoader;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 
@@ -80,8 +91,25 @@ public class ContentFragment extends Fragment {
 
         try {
             Log.i(">>charset", charset.displayName());
+            // 启动异步任务去获取并加载网络HTML内容
+//            new LoadHtmlTask().execute("http://www.baidu.com");  // 这里替换为实际的网址
+           // textView.loadUrl("http://www.baidu.com");
+            // 设置WebView的相关配置
+            WebSettings webSettings = textView.getSettings();
+            webSettings.setJavaScriptEnabled(true);  // 启用JavaScript，根据实际需求决定是否开启
 
-            textView.loadDataWithBaseURL(null, JianDanHtmlParser.getHtml(ImageData.getDataUrl(getContext()).get(position)), "text/html", "utf-8", null);
+            // 设置WebViewClient，用于拦截页面加载和控制跳转等行为
+            textView.setWebViewClient(new WebViewClient() {
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    // 始终返回false，阻止页面跳转，让链接只在当前WebView内加载
+                    return false;
+                }
+            });
+
+            // 加载指定的网络链接
+            textView.loadUrl(ImageData.getDataUrl(getContext()).get(position));  // 这里替换为实际的网址
+
+            //textView.loadDataWithBaseURL(null, JianDanHtmlParser.getHtml(ImageData.getDataUrl(getContext()).get(position)), "text/html", "utf-8", null);
             Log.i(">>parse",ImageData.getDataUrl(getContext()).get(position)+"");
             //textView.loadData(new String(JianDanHtmlParser.getHtml(ImageData.getDataUrl(getContext()).get(position)).getBytes(charset),encoding), mimeType,
             //encoding);
@@ -89,6 +117,47 @@ public class ContentFragment extends Fragment {
             e.printStackTrace();
         }
         return contentView;
+    }
+
+    // 定义一个异步任务类来处理网络请求及内容加载
+    public class LoadHtmlTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String urlString = urls[0];
+            StringBuilder stringBuilder = new StringBuilder();
+            try {
+                URL url = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+
+
+                InputStream inputStream = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                reader.close();
+                inputStream.close();
+                connection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return stringBuilder.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (result != null) {
+                // 对获取到的HTML内容进行处理，使其能在TextView中正确显示
+                result = Html.fromHtml(result).toString();
+//                textView.setText(result);
+            }
+
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

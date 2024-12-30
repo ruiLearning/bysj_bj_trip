@@ -58,8 +58,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -88,8 +88,8 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="center"
-                        android:gravity="center"
                         android:clickable="true"
+                        android:gravity="center"
                         android:src="@drawable/view1" />
 
                     <TextView
@@ -103,8 +103,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -126,8 +126,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -150,14 +150,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-
                 android:layout_height="100dp"
-
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:background="#ffffff">
 
                 <GridView
                     android:id="@+id/gridview"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
@@ -165,8 +165,9 @@
                     android:background="#ffffff"
                     android:columnWidth="100dp"
                     android:gravity="center"
+                    android:layout_gravity="center"
                     android:horizontalSpacing="6dp"
-                    android:numColumns="auto_fit"
+                    android:numColumns="2"
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="5dp"></GridView>
 
@@ -343,9 +344,9 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_weight="0.10"
-        android:gravity="center"
         android:background="#ffffff"
         android:baselineAligned="false"
+        android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="4">
 
@@ -380,7 +381,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
-
+            android:visibility="gone"
             >
 
             <ImageView
