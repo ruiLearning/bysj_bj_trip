@@ -252,7 +252,7 @@ public class PoiSearchDemo extends FragmentActivity implements
      */
     public void onGetPoiDetailResult(PoiDetailResult result) {
         if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(PoiSearchDemo.this, "抱歉，未找到结果", Toast.LENGTH_SHORT)
+            Toast.makeText(PoiSearchDemo.this, "抱歉，未找到结果3", Toast.LENGTH_SHORT)
                     .show();
         } else {
             Toast.makeText(PoiSearchDemo.this, result.getName() + ": " + result.getAddress(), Toast.LENGTH_SHORT)

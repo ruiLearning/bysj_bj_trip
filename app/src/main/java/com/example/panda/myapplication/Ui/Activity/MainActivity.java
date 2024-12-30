@@ -1,5 +1,6 @@
 package com.zgsy.bj.Ui.Activity;
 
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zgsy.bj.Tools.AsynImageLoader;
 import com.zgsy.bj.Tools.DepthPageTransformer;
@@ -52,7 +55,7 @@ import static java.lang.Integer.MAX_VALUE;
 
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, AdapterView.OnItemClickListener {
-    private  boolean record = false;
+    private boolean record = false;
     private LinearLayout Imageview;
     private LinearLayout Imageview_setting;
     private LinearLayout Imageview_enroll;
@@ -66,21 +69,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private PagerAdapter pageradapter;
     private PagerAdapter pageradapter1;
     private TextView textview;
-    private  ArrayList<List_info> informations = new ArrayList<>();
+    private ArrayList<List_info> informations = new ArrayList<>();
     private ListView listView;
-    public  ArrayList<ImageView> mImageViews = new ArrayList<>();
-    public  ArrayList<ImageView> mImageViews1 = new ArrayList<>();
+    public ArrayList<ImageView> mImageViews = new ArrayList<>();
+    public ArrayList<ImageView> mImageViews1 = new ArrayList<>();
     private int[] imgIdArray;
     private int[] imgIdArray1;
-    private  String[] textIdArray;
+    private String[] textIdArray;
     private String[] text = new String[5];
-    public  int count = 0;
-    public  Bitmap[] bmp = new Bitmap[5];
+    public int count = 0;
+    public Bitmap[] bmp = new Bitmap[5];
     private ScheduledExecutorService scheduledExecutorService;
-    private boolean judge=false;
-    private int current=0;
-    private int current1=0;
-    private Integer[]   mImageIds   =
+    private boolean judge = false;
+    private int current = 0;
+    private int current1 = 0;
+    private Integer[] mImageIds =
             {
                     R.drawable.newone_small,
                     R.drawable.newtwo_small,
@@ -88,12 +91,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     R.drawable.newfour_small
 
             };
-    private String mtext[]={
-            "路线一","路线二","路线三","路线四"
+    private String mtext[] = {
+            "路线一", "路线二", "路线三", "路线四"
     };
-/*
-TODO:做图片的异步加载，从Bmob中获取图片地址，然后按加载网络图片的方法去加载图片。
- */
+
+    /*
+    TODO:做图片的异步加载，从Bmob中获取图片地址，然后按加载网络图片的方法去加载图片。
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,28 +117,26 @@ TODO:做图片的异步加载，从Bmob中获取图片地址，然后按加载�
         InitView();
 
 
-
-
         setContentView(R.layout.activity_main);
-        GridView gridView=(GridView)findViewById(R.id.gridview);
+        GridView gridView = (GridView) findViewById(R.id.gridview);
         gridView.setAdapter(new gridviewAdapter(this));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
+                switch (position) {
                     case 0:
 
-                        Intent intent=new Intent();
-                        intent.setClass(MainActivity.this,RoutePlanDemo.class);
+                        Intent intent = new Intent();
+                        intent.setClass(MainActivity.this, RoutePlanDemo.class);
                         startActivity(intent);
                         break;
                     case 1:
-                        Intent intent1=new Intent();
+                        Intent intent1 = new Intent();
                         intent1.setClass(MainActivity.this, BusLineSearchDemo.class);
                         startActivity(intent1);
                         break;
                     case 2:
-                        Intent intent2=new Intent();
+                        Intent intent2 = new Intent();
                         intent2.setClass(MainActivity.this, PoiSearchDemo.class);
                         startActivity(intent2);
                         break;
@@ -154,7 +156,6 @@ TODO:做图片的异步加载，从Bmob中获取图片地址，然后按加载�
         PagerAdapter();
 
 
-
         weather = (ImageView) findViewById(R.id.weather);
         weather.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,18 +171,19 @@ TODO:做图片的异步加载，从Bmob中获取图片地址，然后按加载�
             @Override
             public void onClick(View v) {
                 try {
-                    Intent i = new Intent();
-                    ComponentName cn = null;
-                    if (Integer.parseInt(Build.VERSION.SDK) >= 8) {
-                        cn = new ComponentName("com.android.calendar",
-                                "com.android.calendar.LaunchActivity");
+                    // 创建一个意图，用于打开系统日历应用
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    Uri uri = Uri.parse("content://com.android.calendar/time");
+                    intent.setData(uri);
 
+                    // 检查是否有能处理该意图的应用（也就是系统中是否存在日历应用）
+                    if (intent.resolveActivity(getPackageManager())!= null) {
+                        startActivity(intent);
                     } else {
-                        cn = new ComponentName("com.google.android.calendar",
-                                "com.android.calendar.LaunchActivity");
+                        // 如果没有找到可处理的应用，这里可以进行相应的提示，比如Toast提示用户
+                        // 导入相应的包：import android.widget.Toast;
+                        Toast.makeText(MainActivity.this, "未找到日历应用", Toast.LENGTH_SHORT).show();
                     }
-                    i.setComponent(cn);
-                    startActivity(i);
                 } catch (ActivityNotFoundException e) {
                     // TODO: handle exception
                     Log.e("NotFoundException", e.toString());
@@ -194,7 +196,7 @@ TODO:做图片的异步加载，从Bmob中获取图片地址，然后按加载�
             public void onClick(View v) {
 
 
-                Uri uri = Uri.parse("tel:17888823635");
+                Uri uri = Uri.parse("tel:17301337363");
                 Intent intent = new Intent(Intent.ACTION_DIAL, uri);
                 startActivity(intent);
             }
@@ -216,17 +218,17 @@ TODO:做图片的异步加载，从Bmob中获取图片地址，然后按加载�
 fragment 碎片显示
 路线介绍
  */
-        RelativeLayout r1=(RelativeLayout)findViewById(R.id.Relative1);
-        RelativeLayout r2=(RelativeLayout)findViewById(R.id.Relative2);
-        RelativeLayout r3=(RelativeLayout)findViewById(R.id.Relative3);
-        RelativeLayout r4=(RelativeLayout)findViewById(R.id.Relative4);
+        RelativeLayout r1 = (RelativeLayout) findViewById(R.id.Relative1);
+        RelativeLayout r2 = (RelativeLayout) findViewById(R.id.Relative2);
+        RelativeLayout r3 = (RelativeLayout) findViewById(R.id.Relative3);
+        RelativeLayout r4 = (RelativeLayout) findViewById(R.id.Relative4);
 
         r1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent intent=new Intent();
-                intent.putExtra("num","1");
-                intent.setClass(MainActivity.this,TempActivity.class);
+                Intent intent = new Intent();
+                intent.putExtra("num", "1");
+                intent.setClass(MainActivity.this, TempActivity.class);
                 startActivity(intent);
             }
         });
@@ -234,9 +236,9 @@ fragment 碎片显示
         r2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.putExtra("num","2");
-                intent.setClass(MainActivity.this,TempActivity.class);
+                Intent intent = new Intent();
+                intent.putExtra("num", "2");
+                intent.setClass(MainActivity.this, TempActivity.class);
                 startActivity(intent);
             }
         });
@@ -244,9 +246,9 @@ fragment 碎片显示
         r3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.putExtra("num","3");
-                intent.setClass(MainActivity.this,TempActivity.class);
+                Intent intent = new Intent();
+                intent.putExtra("num", "3");
+                intent.setClass(MainActivity.this, TempActivity.class);
                 startActivity(intent);
             }
         });
@@ -254,15 +256,15 @@ fragment 碎片显示
         r4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.putExtra("num","4");
-                intent.setClass(MainActivity.this,TempActivity.class);
+                Intent intent = new Intent();
+                intent.putExtra("num", "4");
+                intent.setClass(MainActivity.this, TempActivity.class);
                 startActivity(intent);
             }
         });
 
 
-        LayoutInflater inflater=null;
+        LayoutInflater inflater = null;
         inflater = getLayoutInflater();
         Imageview = (LinearLayout) findViewById(R.id.main_menu);
         Imageview.setOnClickListener(new View.OnClickListener() {
@@ -298,25 +300,26 @@ fragment 碎片显示
                 startActivity(intent);
             }
         });
-        Imageview_mine=(LinearLayout)findViewById(R.id.mine);
+        Imageview_mine = (LinearLayout) findViewById(R.id.mine);
         Imageview_mine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent();
-                intent.setClass(MainActivity.this,MineActivity.class);
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MineActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
     }
+
     @Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //从mineActivity 传过来要结束这个activity
-    if(requestCode==101){
-        finish();
+        if (requestCode == 101) {
+            finish();
+        }
     }
-}
+
     private void InitView() {
 /*
         imgIdArray = new int[]{R.drawable.newone, R.drawable.newtwo, R.drawable.newthree, R.drawable.newfour};
@@ -349,7 +352,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                 bmp[1] = BitmapFactory.decodeResource(res, R.drawable.newtwo_small);
                 bmp[2] = BitmapFactory.decodeResource(res, R.drawable.newthree_small);
                 bmp[3] = BitmapFactory.decodeResource(res, R.drawable.newfour_small);
-                for (int i = 0;i < textIdArray.length; i++) {
+                for (int i = 0; i < textIdArray.length; i++) {
                     List_info list_info = new List_info(bmp[i], text[i]);
                     informations.add(list_info);
                 }
@@ -393,7 +396,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 
-    private void PagerAdapter(){
+    private void PagerAdapter() {
 
 
         pageradapter = new PagerAdapter() {
@@ -411,7 +414,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
             @Override
             public void destroyItem(View container, int position, Object object) {
-                Log.i("destroy--->>>",""+position);
+                Log.i("destroy--->>>", "" + position);
                 ((ViewPager) container).removeView(mImageViews.get(position % mImageViews.size()));
 
             }
@@ -422,7 +425,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
             @Override
             public Object instantiateItem(View container, int position) {
-                Log.i("pos--->>",""+position);
+                Log.i("pos--->>", "" + position);
                 int pos = position % 4;
                 current = position;
                 textview.setText(textIdArray[pos]);
@@ -458,7 +461,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
              */
             @Override
             public Object instantiateItem(View container, int position) {
-                current1=position;
+                current1 = position;
                 mImageViews1.get(position % mImageViews1.size()).setBackgroundResource(imgIdArray1[position % mImageViews1.size()]);
                 ((ViewPager) container).addView(mImageViews1.get(position % mImageViews1.size()), 0);
                 return mImageViews1.get(position % mImageViews1.size());
@@ -481,14 +484,14 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                     //viewPager.setCurrentItem((mImageViews.size()) * 100);
 
                     //viewPager.setOnPageChangeListener(MainActivity.this);
-                    String Url[]=new String[]{"https://img2.baidu.com/it/u=3868982764,3926699003&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1422"
-                            ,"https://img0.baidu.com/it/u=2747146180,1946809341&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1421"
-                            ,"https://img2.baidu.com/it/u=3868982764,3926699003&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1422"
-                            ,"http://bmob-cdn-7049.b0.upaiyun.com/2016/10/24/9701488f40e44533807b2508b749e980.png"};
+                    String Url[] = new String[]{"https://img2.baidu.com/it/u=3868982764,3926699003&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1422"
+                            , "https://img0.baidu.com/it/u=2747146180,1946809341&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1421"
+                            , "https://img2.baidu.com/it/u=3868982764,3926699003&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1422"
+                            , "http://bmob-cdn-7049.b0.upaiyun.com/2016/10/24/9701488f40e44533807b2508b749e980.png"};
 
-                    for(int i=0;i<4;i++) {
+                    for (int i = 0; i < 4; i++) {
                         AsynImageLoader asynImageLoader = new AsynImageLoader();
-                        asynImageLoader.showImageAsyn((ImageView) mImageViews.get(i),Url[i],0x7f0200e9);
+                        asynImageLoader.showImageAsyn((ImageView) mImageViews.get(i), Url[i], 0x7f0200e9);
                     }
 
                     viewPager.setAdapter(pageradapter);
@@ -517,6 +520,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         }
 
     };
+
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -528,11 +532,12 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         }
     }
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         //viewPager.setAnimation();
-        judge=true;
-        if(judge!=false){
+        judge = true;
+        if (judge != false) {
             scheduledExecutorService.shutdown();
         }
 
@@ -605,14 +610,49 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             }
         }.start();
     }
-@Override
-    protected void onPause(){
-    super.onPause();
-    scheduledExecutorService.shutdown();
-}
+
     @Override
-    protected  void onStop(){
+    protected void onPause() {
+        super.onPause();
+        scheduledExecutorService.shutdown();
+    }
+
+    @Override
+    protected void onStop() {
         super.onStop();
+    }
+
+    private boolean isExit = false;
+    private Handler handler = new Handler();
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!isExit) {
+                isExit = true;
+                // 提示用户再次点击返回键将退出应用
+                showToast("再按一次返回键退出应用");
+                // 使用Handler延迟2000毫秒（2秒）后将isExit重置为false
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isExit = false;
+                    }
+                }, 2000);
+                return true;
+            } else {
+                // 如果已经点击过一次返回键，并且在2秒内再次点击，就执行退出应用的操作
+                finish();
+                System.exit(0);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void showToast(String message) {
+        // 这里可以使用安卓的Toast来显示提示信息，以下是简单示例，实际应用中可能需要完善Toast的使用，比如设置显示时长等
+        // 导入相应的包：import android.widget.Toast;
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
 

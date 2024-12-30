@@ -221,7 +221,7 @@ public class RoutePlanDemo extends Activity implements BaiduMap.OnMapClickListen
     @Override
     public void onGetWalkingRouteResult(WalkingRouteResult result) {
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果7", Toast.LENGTH_SHORT).show();
         }
         if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
             // 起终点或途经点地址有岐义，通过以下接口获取建议查询信息
@@ -247,7 +247,7 @@ public class RoutePlanDemo extends Activity implements BaiduMap.OnMapClickListen
     public void onGetTransitRouteResult(TransitRouteResult result) {
 
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果6", Toast.LENGTH_SHORT).show();
         }
         if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
             // 起终点或途经点地址有岐义，通过以下接口获取建议查询信息
@@ -304,11 +304,11 @@ public class RoutePlanDemo extends Activity implements BaiduMap.OnMapClickListen
     @Override
     public void onGetDrivingRouteResult(DrivingRouteResult result) {
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果5", Toast.LENGTH_SHORT).show();
         }
         if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
             // 起终点或途经点地址有岐义，通过以下接口获取建议查询信息
-            // result.getSuggestAddrInfo()
+             result.getSuggestAddrInfo();
             return;
         }
         if (result.error == SearchResult.ERRORNO.NO_ERROR) {
@@ -353,7 +353,7 @@ public class RoutePlanDemo extends Activity implements BaiduMap.OnMapClickListen
     @Override
     public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
         if (bikingRouteResult == null || bikingRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RoutePlanDemo.this, "抱歉，未找到结果4", Toast.LENGTH_SHORT).show();
         }
         if (bikingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
             // 起终点或途经点地址有岐义，通过以下接口获取建议查询信息

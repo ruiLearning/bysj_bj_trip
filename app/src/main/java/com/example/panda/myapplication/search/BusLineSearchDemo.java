@@ -160,7 +160,7 @@ public class BusLineSearchDemo extends FragmentActivity implements
     @Override
     public void onGetBusLineResult(BusLineResult result) {
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(BusLineSearchDemo.this, "抱歉，未找到结果",
+            Toast.makeText(BusLineSearchDemo.this, "抱歉，未找到结果1",
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -181,7 +181,7 @@ public class BusLineSearchDemo extends FragmentActivity implements
     public void onGetPoiResult(PoiResult result) {
 
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(BusLineSearchDemo.this, "抱歉，未找到结果",
+            Toast.makeText(BusLineSearchDemo.this, "抱歉，未找到结果2",
                     Toast.LENGTH_LONG).show();
             return;
         }

@@ -123,7 +123,7 @@ public class ShareDemoActivity extends Activity implements
     public void onGetPoiResult(PoiResult result) {
 
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(ShareDemoActivity.this, "抱歉，未找到结果",
+            Toast.makeText(ShareDemoActivity.this, "抱歉，未找到结果8",
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -186,7 +186,7 @@ public class ShareDemoActivity extends Activity implements
     @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(ShareDemoActivity.this, "抱歉，未找到结果",
+            Toast.makeText(ShareDemoActivity.this, "抱歉，未找到结果9",
                     Toast.LENGTH_LONG).show();
             return;
         }
