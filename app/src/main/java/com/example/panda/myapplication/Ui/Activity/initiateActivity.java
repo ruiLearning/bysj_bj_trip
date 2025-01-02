@@ -193,7 +193,7 @@ public class initiateActivity extends Activity implements OnPageChangeListener {
 
 
             lock.lock();
-                SharedPreferences share=getSharedPreferences("first",Activity.MODE_WORLD_READABLE);
+                SharedPreferences share=getSharedPreferences("first",Activity.MODE_PRIVATE );
                 i=share.getInt("first",0);
 
 
