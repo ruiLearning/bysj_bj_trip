@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Message;
 
+import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
@@ -193,15 +194,16 @@ public class initiateActivity extends Activity implements OnPageChangeListener {
 
 
             lock.lock();
-                SharedPreferences share=getSharedPreferences("first",Activity.MODE_PRIVATE );
-                i=share.getInt("first",0);
+            SharedPreferences share = PreferenceManager.getDefaultSharedPreferences(initiateActivity.this);
+            i=share.getInt("first",0);
+
 
 
 
                 if(i==0)    {
                     lock.unlock();
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("first", Context.MODE_PRIVATE); //私有数据
+                    SharedPreferences sharedPreferences =PreferenceManager.getDefaultSharedPreferences(initiateActivity.this);; //私有数据
                     SharedPreferences.Editor editor = sharedPreferences.edit();//获取编辑器
                     editor.putInt("first", 1);
                     editor.apply();//提交修改，这里用apply是先跳过写这个步骤然后直接进行下一步，如果使用commit就更加耗时
